@@ -1,0 +1,89 @@
+plugins {
+    id 'java'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
+}
+
+defaultTasks 'clean', 'test', 'aggregate'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+ext {
+    serenityVersion = '4.2.15'
+    logbackVersion = '1.5.16'
+    restAssuredVersion = '4.3.3'
+    groovyVersion = '4.0.24'
+    junitVersion = '5.11.4'
+    assertjVersion = '3.27.3'
+    hamcrestVersion = '2.2'
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+dependencies {
+    testImplementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
+    // Serenity Dependencies
+    testImplementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-rest-assured:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-screenplay-rest:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+    testImplementation "net.serenity-bdd:serenity-junit5:${serenityVersion}"
+
+    // Rest-Assured Dependencies
+    testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+    testImplementation "io.rest-assured:json-path:4.3.3"
+    testImplementation "io.rest-assured:xml-path:4.3.3"
+
+    // Groovy
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation "org.apache.groovy:groovy-xml:${groovyVersion}"
+
+    // General Test Libraries
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.18.2"
+
+
+    //lombok
+    implementation "org.projectlombok:lombok:1.18.36"
+    annotationProcessor "org.projectlombok:lombok:1.18.36"
+    testImplementation "org.projectlombok:lombok:1.18.36"
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.36"
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'webdriver.base.url', System.getProperty('webdriver.base.url', '')
+    maxParallelForks = 4
+    testLogging.showStandardStreams = true
+}
+
+serenity {
+    reports = ["single-page-html"]
+    requirementsBaseDir = "src/test/resources/features"
+    //outputDirectory = layout.buildDirectory.dir("serenity-reports").get().asFile
+    testRoot = "src/test/java/tests/petstore" // Ensure Serenity finds your test classes
+}
+
+gradle.startParameter.continueOnFailure = true
+
+tasks.named("aggregate") {
+    dependsOn test
+    mustRunAfter test
+}
+
+tasks.named("reports") {
+    dependsOn aggregate
+    mustRunAfter("aggregate")
+}
+
+test.finalizedBy(aggregate, reports)
