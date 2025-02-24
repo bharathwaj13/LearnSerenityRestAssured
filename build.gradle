@@ -55,6 +55,8 @@ dependencies {
     testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.11.4'
     testImplementation group: 'io.cucumber', name: 'cucumber-junit-platform-engine', version: '7.20.1'
 
+    // JUnit 4 (Serenity needs it even if we use JUnit 5)
+    testImplementation 'junit:junit:4.13.2'
 
 
 
@@ -89,6 +91,11 @@ tasks.named("aggregate") {
 tasks.named("reports") {
     dependsOn aggregate
     mustRunAfter("aggregate")
+}
+
+tasks.named("checkOutcomes") {
+    dependsOn reports
+    mustRunAfter("reports")
 }
 
 test.finalizedBy(aggregate, reports)

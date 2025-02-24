@@ -1,10 +1,21 @@
 package specs;
 
-import net.serenitybdd.rest.SerenityRest;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 
-public final class PetSpecBuilder extends BaseSpecBuilder {
+import static net.serenitybdd.rest.SerenityRest.given;
 
-    public static void petSpecs(){
-        SerenityRest.setDefaultBasePath("/pet");
+public final class PetSpecBuilder {
+
+    public static RequestSpecification setPetSpecs() {
+        //SerenityRest.setDefaultRequestSpecification(
+              return given()
+                        .log()
+                        .all()
+                        .baseUri("https://petstore.swagger.io/v2")
+                        .basePath("/pet")
+                        .contentType(ContentType.JSON)
+                        .accept(ContentType.JSON);
+        //);
     }
 }
