@@ -38,7 +38,7 @@ public class PetApiActions extends UIInteractions {
                 .getId();
     }
 
-    @When("I ask for a pet using Kitty's ID: {0}")
+    @When("I ask for a pet using Kitty's ID:")
     public void whenIAskForPetWithId(Long id) {
         when().get("/" + id);
     }

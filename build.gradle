@@ -52,6 +52,11 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.18.2"
 
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.11.4'
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit-platform-engine', version: '7.20.1'
+
+
+
 
     //lombok
     implementation "org.projectlombok:lombok:1.18.36"
@@ -71,7 +76,7 @@ serenity {
     reports = ["single-page-html"]
     requirementsBaseDir = "src/test/resources/features"
     //outputDirectory = layout.buildDirectory.dir("serenity-reports").get().asFile
-    testRoot = "src/test/java/tests/petstore" // Ensure Serenity finds your test classes
+    //testRoot = "src/test/java/tests/petstore" // Ensure Serenity finds your test classes
 }
 
 gradle.startParameter.continueOnFailure = true

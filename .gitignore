@@ -4,6 +4,7 @@ target/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+gradle-debug.log
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
